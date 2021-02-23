@@ -28,6 +28,14 @@ void ClearWinSock() {
 #endif
 }
 
+// response struct
+#pragma pack(1)
+typedef struct response_struct {
+    uint32_t result;
+} response;
+#pragma pack()
+
+
 // Headers for helper functions
 int get_socket(int init);
 int call_function(int sock, void * func_name, uint32_t len);
@@ -164,13 +172,17 @@ int call_function(int sock, void * func_name, uint32_t len) {
     }
     #endif
 
-    // read return result
+    // create read buffer
+    int BUFFSIZE = sizeof(response);
+    char buff[BUFFSIZE];
+    memset(buff, 0, BUFFSIZE);
+
     uint32_t result;
     int read_size;
     #ifdef __WIN32__
-    read_size = recv(sock, (char*)&result, sizeof(uint32_t), 0);
+    read_size = recv(sock, buff, BUFFSIZE, 0);
     #else
-    read_size = read(sock, (char*)&result, sizeof(uint32_t));
+    read_size = read(sock, buff, BUFFSIZE);
     #endif
 
     // check read result error
@@ -178,6 +190,9 @@ int call_function(int sock, void * func_name, uint32_t len) {
         printf("Can't receive result from function: %s\n", (char*)func_name);
         close_socket(sock, EXIT_FAILURE);
     }
+
+    response * res = (response *)buff;
+    int result = res->result;
     
     return (int)ntohl(result);
 }

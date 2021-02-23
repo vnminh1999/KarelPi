@@ -1,9 +1,13 @@
 import socket
 import sys
 import karel_functions
+from ctypes import *
 
 SERVER = "192.168.4.1"
 PORT = 2300
+
+class Response(Structure):
+    _fields_ = [("result", c_uint32)]
 
 def main():
     server_addr = (SERVER, PORT)
@@ -23,11 +27,14 @@ def main():
 
             buff = csock.recv(512)
             while buff:
-                # logic for handling functions here
+                print(buff.decode())
+
+                response = Response(69)
+                csock.send(response)
                 buff = csock.recv(512)
 
-            print("Closing connection to client")
-            print("----------------------------")
+            #print("Closing connection to client")
+            #print("----------------------------")
             csock.close()
 
     except AttributeError as ae:
