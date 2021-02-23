@@ -177,7 +177,6 @@ int call_function(int sock, void * func_name, uint32_t len) {
     char buff[BUFFSIZE];
     memset(buff, 0, BUFFSIZE);
 
-    uint32_t result;
     int read_size;
     #ifdef __WIN32__
     read_size = recv(sock, buff, BUFFSIZE, 0);
@@ -192,9 +191,10 @@ int call_function(int sock, void * func_name, uint32_t len) {
     }
 
     response * res = (response *)buff;
-    int result = res->result;
+    int result = (int)res->result;
+    printf("Result: %d\n", result);
     
-    return (int)ntohl(result);
+    return result;
 }
 
 // Helper method to close socket

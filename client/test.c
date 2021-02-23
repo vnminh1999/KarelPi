@@ -4,5 +4,9 @@
 
 int main() {
     karel_setup();
+    move();
+    turn_left();
+    turn_right();
+    facing_east();
     turn_off();
 }
