@@ -2,6 +2,7 @@ import socket
 import sys
 import karel_functions
 from ctypes import *
+import inspect
 
 SERVER = "192.168.4.1"
 PORT = 2300
@@ -10,6 +11,11 @@ class Response(Structure):
     _fields_ = [("result", c_uint32)]
 
 def main():
+    karel_funcs_list = inspect.getmembers(karel_functions, inspect.isfunction)
+    karel_funcs = dict()
+    for func in karel_funcs_list:
+        karel_funcs[func[0]] = func[1]
+    
     server_addr = (SERVER, PORT)
     ssock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     print("Socket created")
@@ -27,9 +33,10 @@ def main():
 
             buff = csock.recv(512)
             while buff:
-                print(buff.decode())
+                func_name = buff.decode()
 
-                response = Response(69)
+                res = karel_funcs[func_name]()
+                response = Response(res)
                 csock.send(response)
                 buff = csock.recv(512)
 
