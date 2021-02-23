@@ -33,8 +33,7 @@ def main():
                 csock.send(response)
                 buff = csock.recv(512)
 
-            #print("Closing connection to client")
-            #print("----------------------------")
+            print("Closing connection to client")
             csock.close()
 
     except AttributeError as ae:
