@@ -7,7 +7,7 @@
 #else
 #include <sys/socket.h>
 #include <arpa/inet.h>
-#include <unistd.h>
+//#include <unistd.h>
 #endif
 
 // Other libraries
@@ -23,9 +23,9 @@
 // Pragma
 #pragma comment(lib,"ws2_32.lib") // Winsock library
 void ClearWinSock() {
-#ifdef __WIN32__
+    #ifdef __WIN32__
     WSACleanup();
-#endif
+    #endif
 }
 
 // response struct
@@ -192,8 +192,6 @@ int call_function(int sock, void * func_name, uint32_t len) {
 
     response * res = (response *)buff;
     int result = (int)res->result;
-    printf("Result: %d\n", result);
-    
     return result;
 }
 

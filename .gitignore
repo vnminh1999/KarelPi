@@ -1,0 +1,3 @@
+*/*.exe
+*/*.h.gch
+client/test.c

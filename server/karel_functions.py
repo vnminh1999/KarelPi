@@ -27,4 +27,3 @@ def facing_south():
 
 def facing_west():
     return 10
-
